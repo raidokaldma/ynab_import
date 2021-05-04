@@ -1,0 +1,18 @@
+{
+    "revolut": {
+        "phoneNumber": "",
+        "password": ""
+    },
+    "swedbank": {
+        "userId": "",
+        "socialSecurityId": ""
+    },
+    "ynab": {
+        "apiKey": "",
+        "budgetId": "",
+        "accountIds": {
+            "revolut": "",
+            "swedbank": ""
+        }
+    }
+}
