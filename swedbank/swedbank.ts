@@ -2,7 +2,7 @@ import { Browser, Page, parse, puppeteer } from "../deps.ts";
 import { AccountStatement, Summary, Transaction } from "../types.ts";
 import { logProgress, stopProgress } from "../util/log_progress.ts";
 
-/** 
+/**
  * Fetches account statement from Swedbank,
  * uses biometrics on the phone for authentication
  **/
@@ -65,11 +65,11 @@ async function logInWithBiometricId(
 async function fetchTransactions(page: Page): Promise<Transaction[]> {
   await page.click('a[data-wt-label="QL_Account_statement"]');
   page.waitForSelector("#account-statement-form");
-  const link = await page.waitForSelector(".period-list li:last-of-type a");
+  const link = await page.waitForSelector(
+    'button[data-type="PREV_MONTH_TODAY"]',
+  );
   await link?.click();
-  // await page.click(".period-list li:last-of-type a"); // Pick last predefined filter: Last month + current month
-
-  await page.waitForSelector("#tblStatement");
+  await page.waitForSelector("#table-statement");
 
   type TableRowData = {
     date: string;
@@ -79,7 +79,7 @@ async function fetchTransactions(page: Page): Promise<Transaction[]> {
   };
 
   const rows: TableRowData[] = await page.$$eval<TableRowData[]>(
-    "#tblStatement tbody tr",
+    "#table-statement tbody tr",
     (tableRows) => {
       return tableRows.filter((tr) => tr.id.startsWith("t_0")).map((tr) => {
         const tdElements = tr.querySelectorAll("td");
