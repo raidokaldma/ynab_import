@@ -87,7 +87,6 @@ function toTransactions(
   const transactions: Transaction[] = revolutTransactions
     .filter((t) => t.currency === "EUR")
     .filter((t) => t.state === "COMPLETED" || t.state === "PENDING")
-    .sort((t1, t2) => t1.startedDate - t2.startedDate)
     .map((t) => {
       const date = new Date(t.startedDate);
       const amount = (t.amount - t.fee) / 100.0;

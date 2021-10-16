@@ -1,4 +1,12 @@
-import { brightGreen, brightRed, format, Table, underline } from "../deps.ts";
+import {
+  brightGreen,
+  brightRed,
+  compareAsc,
+  format,
+  startOfDay,
+  Table,
+  underline,
+} from "../deps.ts";
 import { AccountStatement, Summary, Transaction } from "../types.ts";
 
 export function printAccountStatement(
@@ -18,12 +26,14 @@ export function printTransactions(transactions: Transaction[]) {
     underline("Payer/Payee"),
     underline("Description"),
   ])
-    .body(transactions.map((t) => [
-      formatDate(t.date),
-      formatAmountWithColor(t.amount),
-      t.payerOrPayee,
-      t.description,
-    ]))
+    .body(
+      sortTransactions(transactions).map((t) => [
+        formatDate(t.date),
+        formatAmountWithColor(t.amount),
+        t.payerOrPayee,
+        t.description,
+      ]),
+    )
     .padding(2)
     .render();
 }
@@ -37,11 +47,19 @@ export function printSummary(summary: Summary) {
   console.log("Available: " + summary.availableAmount.toFixed(2).padStart(8));
 }
 
-function formatAmountWithColor(amount: number) {
+function sortTransactions(transactions: Transaction[]) {
+  return [...transactions].sort((t1, t2) =>
+    // Sort by date (without time) in ascending order, then by amount in descending order
+    compareAsc(startOfDay(t1.date), startOfDay(t2.date)) ||
+    (t2.amount - t1.amount)
+  );
+}
+
+function formatAmountWithColor(amount: number): string {
   const color = amount > 0 ? brightGreen : brightRed;
   return color(amount.toFixed(2).padStart(10));
 }
 
-function formatDate(date: Date) {
+function formatDate(date: Date): string {
   return format(date, "yyyy-MM-dd");
 }
