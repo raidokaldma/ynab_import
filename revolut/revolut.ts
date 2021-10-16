@@ -9,7 +9,6 @@ const kyWithDefaults = ky.create({
     "x-device-id": uuid.generate(),
     "x-browser-application": "WEB_CLIENT",
     "x-client-version": "100.0",
-    "content-type": "application/json",
   },
 });
 
@@ -39,7 +38,7 @@ async function acquireToken(phone: string, password: string): Promise<Token> {
   // Step 1
   const { tokenId }: SignIn = await kyWithDefaults.post(
     "https://app.revolut.com/api/retail/signin",
-    { body: JSON.stringify({ phone, password, channel: "APP" }) },
+    { json: { phone, password, channel: "APP" } },
   ).json<SignIn>();
 
   // Step 2 - retry with exponential backoff until API returns token (HTTP status 200)
@@ -51,7 +50,7 @@ async function acquireToken(phone: string, password: string): Promise<Token> {
         statusCodes: [422], // API returns status 422 while user has not yet approved sign in
         limit: 10,
       },
-      body: JSON.stringify({ password, phone, tokenId }),
+      json: { password, phone, tokenId },
     },
   ).json<Token>();
 

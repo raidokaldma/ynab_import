@@ -62,10 +62,9 @@ async function postTransactions(
     `https://api.youneedabudget.com/v1/budgets/${budgetId}/transactions`,
     {
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
       },
-      body: JSON.stringify(transactions),
+      json: transactions,
     },
   ).json<YnabTransactionsResponse>();
 }
