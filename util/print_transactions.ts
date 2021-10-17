@@ -42,9 +42,11 @@ export function printSummary(summary: Summary) {
   console.log(underline("Summary"));
 
   const balance = summary.availableAmount + summary.reservedAmount;
-  console.log("Balance:   " + (balance).toFixed(2).padStart(8));
-  console.log("Reserved:  " + summary.reservedAmount.toFixed(2).padStart(8));
-  console.log("Available: " + summary.availableAmount.toFixed(2).padStart(8));
+
+  const formatNumber = (number: number) => number.toFixed(2).padStart(8);
+  console.log("Balance:   " + formatNumber(balance));
+  console.log("Reserved:  " + formatNumber(summary.reservedAmount));
+  console.log("Available: " + formatNumber(summary.availableAmount));
 }
 
 function sortTransactions(transactions: Transaction[]) {

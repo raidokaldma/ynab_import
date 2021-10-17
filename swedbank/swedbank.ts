@@ -5,7 +5,7 @@ import { logProgress, stopProgress } from "../util/log_progress.ts";
 /**
  * Fetches account statement from Swedbank,
  * uses biometrics on the phone for authentication
- **/
+ */
 export async function fetchAccountStatement(
   userId: string,
   socialSecurityId: string,

@@ -5,9 +5,9 @@ import {
   printAccountStatement,
   printTransactions,
 } from "./util/print_transactions.ts";
-import { fetchAccountStatement as fetchSwedbankAccountStatement } from "./swedbank/swedbank.ts";
-import { fetchAccountStatement as fetchRevolutAccountStatement } from "./revolut/revolut.ts";
-import { fetchAccountStatement as fetchDemoAccountStatement } from "./demo/demo.ts";
+import * as swedbank from "./swedbank/swedbank.ts";
+import * as revolut from "./revolut/revolut.ts";
+import * as demo from "./demo/demo.ts";
 import { readArgsOrExit } from "./util/args_parser.ts";
 import { Config, readConfigOrExit } from "./util/config_parser.ts";
 
@@ -22,7 +22,7 @@ type BankConfig = {
 const bankConfigurations: Record<BankName, BankConfig> = {
   swedbank: ({
     fetch: () =>
-      fetchSwedbankAccountStatement(
+      swedbank.fetchAccountStatement(
         config.swedbank.userId,
         config.swedbank.socialSecurityId,
       ),
@@ -30,14 +30,14 @@ const bankConfigurations: Record<BankName, BankConfig> = {
   }),
   revolut: ({
     fetch: () =>
-      fetchRevolutAccountStatement(
+      revolut.fetchAccountStatement(
         config.revolut.phoneNumber,
         config.revolut.password,
       ),
     ynabAccountId: config.ynab.accountIds.revolut,
   }),
   demo: ({
-    fetch: () => fetchDemoAccountStatement(),
+    fetch: () => demo.fetchAccountStatement(),
   }),
 };
 
