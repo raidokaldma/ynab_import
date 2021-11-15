@@ -59,7 +59,7 @@ async function logInWithBiometricId(
   await page.click("#SIMPLE_ID button[type='submit']");
 
   // Wait until logged in
-  await page.waitForSelector("#last-login-container");
+  await page.waitForSelector(".ui-welcome__container");
 }
 
 async function fetchTransactions(page: Page): Promise<Transaction[]> {
