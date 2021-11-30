@@ -10,7 +10,10 @@ export async function fetchAccountStatement(
   userId: string,
   socialSecurityId: string,
 ): Promise<AccountStatement> {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    defaultViewport: { width: 1200, height: 600 },
+    headless: Deno.env.get("HEADLESS") !== "false", // Defaults to true
+  });
 
   try {
     logProgress("Opening landing page");
