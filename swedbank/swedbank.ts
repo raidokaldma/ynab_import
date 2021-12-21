@@ -112,25 +112,25 @@ async function fetchAccountOverview(page: Page): Promise<Summary> {
   await page.waitForSelector("#accounts-balance tbody tr");
 
   // Takes amounts from 1st account
-  const summary = await page.$eval<Summary>(
-    "#accounts-balance tbody tr",
-    (firstTr): Summary => {
-      const reservedAmount = firstTr.querySelector('td[data-th="Broneeritud"]')
-        .innerText;
+  const reservedAmount = await (await page.$(
+    '#accounts-balance tbody tr td[data-th="Broneeritud"]',
+  ))?.evaluate((el) => el.textContent);
 
-      const availableAmount = firstTr.querySelector('td[data-th="Vaba jääk"]')
-        .innerText
+  const availableAmount = await (await page.$(
+    '#accounts-balance tbody tr td[data-th="Vaba jääk"]',
+  ))?.evaluate((el) => el.textContent);
+
+  const toNumber = (val: string) =>
+    Number(
+      val
         .replace(/\s+/, "") // 1 234.56EUR -> 1234.56EUR
-        .replace("EUR", ""); // 1234.56EUR -> 1234.56
+        .replace("EUR", ""), // 1234.56EUR -> 1234.56
+    );
 
-      return {
-        reservedAmount: Number(reservedAmount),
-        availableAmount: Number(availableAmount),
-      };
-    },
-  );
-
-  return summary as unknown as Summary;
+  return {
+    reservedAmount: toNumber(reservedAmount),
+    availableAmount: toNumber(availableAmount),
+  };
 }
 
 function parseNumber(numberAsString: string): number {
