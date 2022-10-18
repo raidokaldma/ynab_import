@@ -43,7 +43,7 @@ async function openLandingPage(browser: Browser): Promise<Page> {
 }
 
 async function acceptCookies(page: Page) {
-  await page.click("#cookie-consent .ui-cookie-consent__accept-all-button");
+  await page.click("#cookie-consent .ui-cookie-consent__accept-button");
 
   // Wait for modal to disappear
   await page.waitForSelector("#cookie-consent .ui-modal__window", {
