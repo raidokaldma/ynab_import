@@ -60,7 +60,7 @@ async function acquireToken(phone: string, password: string): Promise<Token> {
 async function getRevolutTransactions(
   token: Token,
 ): Promise<RevolutTransaction[]> {
-  const fromDate: number = Date.now() - 30 * 24 * 60 * 60 * 1000; // last 30 days
+  const fromDate: number = Date.now() - 60 * 24 * 60 * 60 * 1000; // last 30 days
 
   return await kyWithAuth(token).get(
     `https://api.revolut.com/user/current/transactions?count=500&from=${fromDate}`,
